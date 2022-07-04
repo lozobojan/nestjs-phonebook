@@ -1,41 +1,38 @@
-version: '3'
+version: "3.8"
 
 services:
+  # Our NestJS Api
   api:
     build:
-      context: .
       dockerfile: Dockerfile
-      args:
-        - NODE_ENV=development
-    environment:
-      - PORT=3000
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USER=postgres
-      - DB_PW=test
-    ports:
-      - 3000:3000
+      context: .
+      # Only build development stage from Dockerfile
+      # target: development
+    # Mount our host dir to the docker container
+    # Reflect File changes from host to container
+    volumes:
+      - ./:/home/node/app
+      - /home/node/app/node_modules/
+    # RUN in debug mode: npm run start:debug --> Also start your vscode debugger
+    # Run in dev mode: npm run start:dev
+    command: npm run start:dev
     depends_on:
       - postgres
-    links:
-      - postgres:postgres
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    command: npm run start:dev
-
-  postgres:
-    image: postgres:alpine
-    restart: always
     environment:
-      - DB_USER=postgres
-      - DB_PASS=test
-      - POSTGRES_PASSWORD=test
+      DATABASE_URL: postgres://user:password@postgres:5432/phonebook
+      NODE_ENV: development
+      JWT_SECRET: hard_to_guess_secret_123
+      PORT: 3000
     ports:
-      - 5432:5432
+      - 3000:3000
+      - 9229:9229
 
-  adminer:
-    image: adminer
-    restart: always
+  # Our Postgres Database for NestJS to connect to
+  postgres:
+    image: postgres:14.4
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: phonebook
     ports:
-      - 8080:8080
+      - 35000:5432
