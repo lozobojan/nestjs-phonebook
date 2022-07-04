@@ -11,7 +11,7 @@ export class AppController {
   }
 
   @Get('test')
-  getTest(): string {
-    return 'Test 12345678';
+  getTest() {
+    return { message: 'Test route' };
   }
 }
