@@ -19,4 +19,7 @@ export class ContactService {
         return from(this.contactRepository.find());
     }
 
+    findOne(id: number): Observable<ContactInterface> {
+        return from(this.contactRepository.findOneBy({id: id}));
+    }
 }

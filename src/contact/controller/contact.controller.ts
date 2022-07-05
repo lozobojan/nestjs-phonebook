@@ -1,7 +1,7 @@
 /* eslint-disable */
-import {Body, Controller, Get, Post} from '@nestjs/common';
+import {Body, Controller, Get, Param, Post} from '@nestjs/common';
 import {ContactService} from "../service/contact.service";
-import {Observable} from "rxjs";
+import {from, Observable} from "rxjs";
 import {ContactInterface} from "../models/contact.interface";
 
 @Controller('contacts')
@@ -18,6 +18,11 @@ export class ContactController {
     @Post()
     add(@Body() contact: ContactInterface): Observable<ContactInterface>{
         return this.contactService.add(contact);
+    }
+
+    @Get('/:id')
+    findOne(@Param('id') id: number): Observable<ContactInterface>{
+        return this.contactService.findOne(id);
     }
 
 }
