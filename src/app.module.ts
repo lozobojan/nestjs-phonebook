@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ContactModule } from './contact/contact.module';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 /* eslint-disable */
 @Module({
@@ -17,7 +18,8 @@ import { UserModule } from './user/user.module';
         synchronize: true
       }),
       ContactModule,
-      UserModule
+      UserModule,
+      AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
