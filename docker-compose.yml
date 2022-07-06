@@ -19,7 +19,7 @@ services:
     depends_on:
       - postgres
     environment:
-      DATABASE_URL: postgres://user:password@postgres:5432/phonebook
+      DATABASE_URL: postgres://service:password@postgres:5432/phonebook
       NODE_ENV: development
       JWT_SECRET: hard_to_guess_secret_123
       PORT: 3000
@@ -31,7 +31,7 @@ services:
   postgres:
     image: postgres:14.4
     environment:
-      POSTGRES_USER: user
+      POSTGRES_USER: service
       POSTGRES_PASSWORD: password
       POSTGRES_DB: phonebook
     ports:
