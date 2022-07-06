@@ -11,7 +11,8 @@ export class AuthService {
     constructor(private jwtService: JwtService) {}
 
     generateJWT(user: User): Observable<string>{
-        return from(this.jwtService.signAsync(user));
+        let {password, ...otherData} = user; // remove password
+        return from(this.jwtService.signAsync({otherData}));
     }
 
     hashPassword(password: string): Observable<string>{
