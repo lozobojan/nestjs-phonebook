@@ -67,4 +67,27 @@ export class UserService {
     deleteOne(id:number): Observable<DeleteResult>{
         return from(this.userRepository.delete(id));
     }
+
+    login(user: User):Observable<string>{
+        return this.validateUser(user.email, user.password).pipe(
+            switchMap( (user) => user ? this.authService.generateJWT(user) : "Wrong credentials" )
+        );
+    }
+
+    validateUser(email: string, password: string): Observable<User>{
+        return this.findByEmail(email).pipe(
+            switchMap( (user: User) =>
+                this.authService.comparePasswords(password, user.password).pipe(
+                    map( (passwordsMatch) => {
+                        if (passwordsMatch) return user;
+                        else throw Error();
+                    })
+                )
+            )
+        );
+    }
+
+    findByEmail(email: string): Observable<User>{
+        return from(this.userRepository.findOneBy({email: email}));
+    }
 }
