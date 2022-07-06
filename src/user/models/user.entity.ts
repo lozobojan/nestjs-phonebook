@@ -20,6 +20,6 @@ export class User{
 
     @BeforeInsert()
     emailToLowercase(){
-        this.email.toLowerCase();
+        this.email = this.email.toLowerCase();
     }
 }
