@@ -13,7 +13,7 @@ export class User{
     email: string;
 
     @Column()
-    password: string;
+    password?: string;
 
     @Column({ default: () => 'CURRENT_TIMESTAMP' })
     registered_at?: Date;
