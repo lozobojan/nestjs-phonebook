@@ -16,11 +16,23 @@ export class UserService {
     ) {}
 
     findAll(): Observable<UserInterface[]>{
-        return from(this.userRepository.find());
+        return from(this.userRepository.find()).pipe(
+            map((users: User[]) => {
+              users.forEach((user) => { delete user.password });
+              return users;
+            })
+        );
     }
 
     findOne(id: number): Observable<UserInterface>{
-        return from(this.userRepository.findOneBy({id: id}));
+        // map user: remove password from it
+        return from(this.userRepository.findOneBy({id: id})).pipe(
+            map( (user: User) => {
+                const {password, ...otherData} = user;
+                return otherData;
+            }),
+            catchError(err => throwError(err))
+        );
     }
 
     add(user: UserInterface): Observable<UserInterface>{
@@ -45,6 +57,10 @@ export class UserService {
     }
 
     updateOne(id:number, user: UserInterface): Observable<UpdateResult>{
+        // prevent user from updating email and/or password
+        delete user.email;
+        delete user.password;
+
         return from(this.userRepository.update(id, user));
     }
 
